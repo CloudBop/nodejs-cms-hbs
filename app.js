@@ -18,7 +18,7 @@ app.use('/', home)
 // connects routes on this path
 app.use('/admin', admin)
 app.use('/admin/posts', posts)
-
+//
 //
 app.listen(4500, ()=>{
     console.log(`listening on port 45000`)
