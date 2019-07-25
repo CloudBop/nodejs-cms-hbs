@@ -59,14 +59,16 @@ const PostSchema = new Schema({
         type: String,
         require: true
 
+    },
+
+    file:{
+
+        type: String
+    
     }
 
+
 })
-
-
-    // file:{
-
-    //     type: String,
 
 
     // },

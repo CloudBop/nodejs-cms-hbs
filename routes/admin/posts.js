@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Post = require('../../models/Post')
+const fs = require('fs')
+const { isEmpty, uploadDir } = require('../../helpers/upload-helper')
+
 // admin/ is defined in middleware
 // for all routes after admin/
 router.all('/*', (req, res, next)=>{
@@ -33,33 +36,87 @@ router.get('/edit/:id', (req, res) =>{
 // delete post from btn
 router.delete('/:id', (req, res) =>{
 
-    Post.deleteOne( {_id: req.params.id} ).then( post=>{
-        // obj destructuring/ shorthand
-        res.redirect('/admin/posts')
+    Post.findOne( {_id: req.params.id} ).then( post=>{
+        // delete from filesystem
+        // console.log(post)
+
+        
+        fs.unlink(uploadDir+ post.file, (err)=>{
+            if(err){ 
+                console.log(err) 
+                return 'end'; 
+            }
+
+            post.remove()
+
+            req.flash('success-message', 'post was successfully deleted')
+            res.redirect('/admin/posts')
+
+            
+        })
+        // // obj destructuring/ shorthand
+        // res.redirect('/admin/posts')
+        //  
     }).catch( e=> {console.log(e)})
 
 })
 //
 router.post('/create', (req,res)=>{
 
-    // sanitise (BS4 CB === on || undefined   ) 
-    const allowComments = req.body.allowComments === 'on' ? true : false
-    // console.log(allowComments)
-    // create post model data
-    const newPost = new Post({
-        title: req.body.title,
-        status: req.body.status,
-        allowComments: allowComments,
-        body: req.body.body
-    })
-    // save to db
-    newPost.save().then( savedPost=>{
-        console.log(savedPost)
-        // makes an error
-        res.redirect('/admin/posts')
-    }).catch( error =>{
-        console.log(error)
-    })
+    let errors=[];
+    // if no title and then run this
+    !req.body.title && errors.push( {message: 'please add a title'})
+    // if no title and then run this
+    !req.body.body && errors.push( {message: 'please add a description'})
+    //
+    //
+    if(errors.length>0){
+
+        res.render('admin/posts/create',{
+            errors
+        })
+
+    }else{
+
+        let filename ='';
+
+        // watchout ! req.files === innput name=file
+        if( !isEmpty(req.files) ){
+            // save data to to server /uplodads/
+            const file = req.files.file
+            // append  
+            filename = Date.now()+'-'+file.name
+            //
+            const dirUploads = './public/uploads/'
+            //
+            file.mv(dirUploads+filename, (err)=>{
+                if(err) throw err
+            })
+        }
+        // sanitise (BS4 CB === on || undefined   ) 
+        const allowComments = req.body.allowComments === 'on' ? true : false
+        // create post model data
+        const newPost = new Post({
+            title: req.body.title,
+            status: req.body.status,
+            allowComments: allowComments,
+            body: req.body.body,
+            file: filename
+        })
+        // save to db
+        newPost.save().then( savedPost=>{
+            // console.log(savedPost)
+            // makes an error
+            req.flash('success-message', `The post, ${savedPost.title} was successfully created.`)
+            res.redirect('/admin/posts')
+        }).catch( validator =>{
+            // mongoose Schema validation error
+            console.log(validator)
+            // res.render('/admin/posts/create', {errors: validator.errors })
+            // should never be called
+        })
+
+    }
 })
 // submit edit form | requires method override
 router.put('/edit/:id', (req, res)=>{

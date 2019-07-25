@@ -1,5 +1,7 @@
 <h1>ALL POSTS</h1>
 
+{{> home/form-msgs}}
+
 
 <table class="table table-bordered">
 
@@ -7,7 +9,7 @@
         <tr>
 
             <th>Id</th>
-            {{!-- <th>File</th> --}}
+            <th>File</th>
             <th>Title</th>
             <th>Status</th>
             {{!-- <th>Category</th> --}}
@@ -25,7 +27,7 @@
         <tr>
 
             <td>{{id}}</td>
-            {{!-- <td><img height="50" class="img-responsive" src="/uploads/{{file}}" alt=""></td> --}}
+            <td><img height="50" class="img-responsive" src="/uploads/{{file}}" alt=""></td>
             <td>{{title}}</td>
             <td>{{status}}</td>
             {{!-- <td>{{category.name}}</td> --}}

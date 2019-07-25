@@ -9,6 +9,11 @@ router.all('/*', (req, res, next)=>{
 })
 
 router.get('/', (req,res)=>{
+
+    // req.session.edwin = "Edwin"
+
+    // req.session.edwin && ( console.log('we found Edwin' ))
+
     res.render('home/index')
 })
 router.get('/about', (req,res)=>{
