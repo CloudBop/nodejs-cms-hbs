@@ -15,12 +15,12 @@ const PostSchema = new Schema({
 
 
 
-    // category: {
+    category: {
 
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'categories'
+        type: Schema.Types.ObjectId,
+        ref: 'categories'
 
-    // },
+    },
 
 
     title:{
@@ -65,20 +65,20 @@ const PostSchema = new Schema({
 
         type: String
     
+    },
+
+    date: {
+
+        type: Date,
+        default: Date.now()
+
     }
 
 
 })
 
 
-    // },
-
-    // date: {
-
-    //     type: Date,
-    //     default: Date.now()
-
-    // },
+    
 
 
 

@@ -33,7 +33,6 @@ router.post('/generate-fake-posts', (req,res)=>{
     res.redirect('/admin/posts')
 })
 
-
  
 
 

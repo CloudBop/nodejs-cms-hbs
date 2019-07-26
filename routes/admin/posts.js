@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Post = require('../../models/Post')
+const Category = require('../../models/Category')
 const fs = require('fs')
 const { isEmpty, uploadDir } = require('../../helpers/upload-helper')
 
@@ -15,21 +16,31 @@ router.all('/*', (req, res, next)=>{
 
 router.get('/', (req,res)=>{
     // query db
-    Post.find( {} ).then( posts=>{
+    Post.find( {} )
+        // mongooose stuff | post stores cat-_id not  cat-_id.name  
+        .populate('category')
+        .then( posts=>{
         // obj destructuring/ shorthand
         res.render('admin/posts', { posts })
     }).catch( e=> {console.log(e)})
 })
 // /admin/posts/create
 router.get('/create', (req,res)=>{
-    res.render('admin/posts/create')
+    Category.find({}).then(categories=>{
+
+        res.render('admin/posts/create', { categories: categories });
+
+    });
 })
 // go to edit page of post
 router.get('/edit/:id', (req, res) =>{
 
     Post.findOne( {_id: req.params.id} ).then( post=>{
-        // obj destructuring/ shorthand
-        res.render('admin/posts/edit', { post })
+        Category.find({}).then(categories=>{
+
+            res.render('admin/posts/edit', {post: post, categories: categories});
+
+        });
     }).catch( e=> {console.log(e)})
 
 })
@@ -49,7 +60,7 @@ router.delete('/:id', (req, res) =>{
 
             post.remove()
 
-            req.flash('success-message', 'post was successfully deleted')
+            req.flash('success-message', `The post, ${post.title} was successfully deledted.`)
             res.redirect('/admin/posts')
 
             
@@ -101,6 +112,7 @@ router.post('/create', (req,res)=>{
             status: req.body.status,
             allowComments: allowComments,
             body: req.body.body,
+            category: req.body.category,
             file: filename
         })
         // save to db
@@ -129,8 +141,29 @@ router.put('/edit/:id', (req, res)=>{
         post.status = req.body.status
         post.allowComments = allowComments
         post.body = req.body.body
+        post.category = req.body.category
+
+        
+        /** BUG WARNING
+         * doesn't remove original image. meaning origianl will be stored indefinitely.
+         */ 
+        // if img changed 
+        if( !isEmpty(req.files) ){
+            // save data to to server /uplodads/
+            const file = req.files.file
+            // prepend  
+            let filename = Date.now()+'-'+file.name
+            // 
+            const dirUploads = './public/uploads/'
+            //
+            post.file = filename
+            file.mv(dirUploads+filename, (err)=>{
+                if(err) throw err
+            })
+        }
 
         post.save().then( updatedPost=>{
+            req.flash('success-message', `The post, ${updatedPost.title} was successfully edited.`)
             res.redirect('/admin/posts')
         })
     })

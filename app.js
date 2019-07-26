@@ -22,11 +22,11 @@ mongoose.connect('mongodb://localhost:27017/cms', { useNewUrlParser: true } ).th
 // middleware : connect static public folder
 app.use(express.static(path.join(__dirname, 'public')))
 
-const { select } = require('./helpers/hbs-helpers')
+const { select, generateDate } = require('./helpers/hbs-helpers')
 // setup template engine & set default page layout
 app.engine('handlebars', exphbs( {
     defaultLayout: 'home', 
-    helpers: { select:select }
+    helpers: { select:select, generateDate:generateDate }, 
 }))
 app.set('view engine', 'handlebars')
 // https://www.npmjs.com/package/express-handlebars
@@ -59,11 +59,15 @@ app.use( (req,res,next)=>{
 const home = require('./routes/home/index')
 const admin = require('./routes/admin/index')
 const posts = require('./routes/admin/posts')
+const categories = require('./routes/admin/categories')
+
 // connect routes to middleware
 app.use('/', home)
 // connects routes on this path
 app.use('/admin', admin)
 app.use('/admin/posts', posts)
+app.use('/admin/categories', categories)
+
 
 app.listen(4500, ()=>{
     console.log(`listening on port 45000`)
