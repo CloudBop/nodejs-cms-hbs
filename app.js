@@ -9,6 +9,7 @@ const upload = require('express-fileupload')
 const session = require('express-session')
 const flash = require('connect-flash')
 const {mongoDbURL} = require('./config/database')
+const passport = require('passport')
 // mongoose will connect || create [cms]
 mongoose.connect(mongoDbURL, { useNewUrlParser: true } ).then( db=>{
     console.log('MONGO connected')
@@ -47,12 +48,20 @@ app.use( session({
 }))
 // flash
 app.use( flash() )
+// passport
+app.use(passport.initialize() )
+// creates a req.user on the session
+app.use(passport.session() )
+
 // local variables using middleware
 app.use( (req,res,next)=>{
     // sets local variable within handlebars
     res.locals.success_message = req.flash('success-message')
     res.locals.error_message = req.flash('error_message')
     res.locals.form_errors = req.flash('form_errors')
+    // bind req.user && req.error from passport, this means we don't need to pass the variable to handblebars via individual responses
+    res.locals.user = req.user || null
+    res.locals.error = req.flash('error')
     // invoke rest of called route
     next()
 })

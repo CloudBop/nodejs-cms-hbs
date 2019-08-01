@@ -2,9 +2,11 @@ const express = require('express')
 const router = express.Router()
 const faker = require('faker')
 const Post = require('../../models/Post')
+const { userAuthenticated } = require('../../helpers/authentication')
+
 // admin/ is defined in middleware
 // for all routes after admin/
-router.all('/*', (req, res, next)=>{
+router.all('/*', userAuthenticated, (req, res, next)=>{
     // override | req.app.locals.layout = 'home'
     req.app.locals.layout = 'admin'
     //

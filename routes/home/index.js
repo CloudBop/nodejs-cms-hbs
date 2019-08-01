@@ -5,6 +5,7 @@ const Category = require('../../models/Category')
 const User = require('../../models/User')
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
+// check email - password
 const LocalStrategy = require('passport-local').Strategy
 
 router.all('/*', (req, res, next)=>{
@@ -46,13 +47,46 @@ router.get('/login', (req,res)=>{
     res.render('home/login')
 })
 
-// tell passport to authenticate emails
+router.get('/logout', (req,res)=>{
+    // passport method
+    req.logOut()
+    //
+    res.redirect('/login')
+})
+
+
+// tell passport to authenticate emails - like middleware 
 passport.use( new LocalStrategy({
+    // instead of validating username use email instead
     usernameField: 'email'
 }, (email, password, done)=>{
-    console.log(email)
-    console.log(password)
+    
+    User.findOne({email:email}).then(user=>{
+
+        if(!user) return done(null, false, {message:'User not found.'})
+
+        bcrypt.compare(password, user.password, (err, matched)=>{
+            if (err) return err;
+
+            if(matched){
+                return done(null, user)
+            } else {
+                return done(null, false, {message: 'Incorrect password.'})
+            }
+        })
+    })
 }))
+//
+// - passport.method() using sessions
+//
+passport.serializeUser( function(user,done){
+    done(null,user.id)
+})
+passport.deserializeUser( function(id, done){
+    User.findById(id, function(err, user){
+        done(err,user)
+    })
+})
 // login route
 router.post('/login', (req,res,next)=>{
 
@@ -92,7 +126,7 @@ router.post('/register', (req,res)=>{
             lastName: req.body.lastName,
             email: req.body.email,
         })
-
+        
     }else{
 
         User.findOne( {email: req.body.email}).then( (user)=>{
