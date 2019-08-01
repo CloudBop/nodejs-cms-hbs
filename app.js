@@ -8,9 +8,9 @@ const methodOverride = require('method-override')
 const upload = require('express-fileupload')
 const session = require('express-session')
 const flash = require('connect-flash')
-
+const {mongoDbURL} = require('./config/database')
 // mongoose will connect || create [cms]
-mongoose.connect('mongodb://localhost:27017/cms', { useNewUrlParser: true } ).then( db=>{
+mongoose.connect(mongoDbURL, { useNewUrlParser: true } ).then( db=>{
     console.log('MONGO connected')
 } ).catch( err=>{ console.log(err) } )
 
@@ -51,6 +51,8 @@ app.use( flash() )
 app.use( (req,res,next)=>{
     // sets local variable within handlebars
     res.locals.success_message = req.flash('success-message')
+    res.locals.error_message = req.flash('error_message')
+    res.locals.form_errors = req.flash('form_errors')
     // invoke rest of called route
     next()
 })
