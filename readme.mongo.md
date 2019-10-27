@@ -1,5 +1,10 @@
  monngo shell cmds
 
+> Catalina Warning
+> catalina does NOT allow anything to be written to the root folder.
+> old Dbs have been moved to home directory
+> start mongo with...
+mongod --dbpath ~/data/db
 
 > mongo
 > show dbs
