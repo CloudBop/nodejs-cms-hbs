@@ -29,22 +29,41 @@
         <p>{{post.body}}</p>
 
         <hr>
+        {{#if user}}
 
-         <!-- Comments Form -->
-        <div class="card my-4">
-            <h5 class="card-header">Leave a Comment:</h5>
-            <div class="card-body">
-                
-                <form action="/admin/comments" method="post">
-                    <div class="form-group">
-                        <textarea name="body" class="form-control" rows="3"></textarea>
+            <!-- Comments Form -->
+            {{#if post.allowComments}}
+            <div class="card my-4">
+                <h5 class="card-header">Leave a Comment:</h5>
+                <div class="card-body">
+                    
+                    <form action="/admin/comments" method="post">
+                        <div class="form-group">
+                            <textarea name="body" class="form-control" rows="3"></textarea>
 
-                        <input type="hidden" value="{{post.id}}" name="id">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                            <input type="hidden" value="{{post.id}}" name="id">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
             </div>
-        </div>
+            {{else}}
+
+            <h2>Comments not allowed for this post</h2>
+
+                <br>
+                <hr>
+
+
+            {{/if}}
+        {{else}}
+
+        You need to login to comment <a href="/login">Login</a>
+
+        <br>
+        <hr>
+
+    {{/if}}
 
 
 

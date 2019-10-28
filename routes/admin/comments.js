@@ -54,9 +54,9 @@ router.post('/', (req, res) => {
 router.delete('/:id', (req, res) => {
   // remove this id from comment model
   Comment.remove({ _id: req.params.id }).then(deleteItem => {
-    // remove comment from post.comments [array]
+    // find comment.id in this post.comments array and remove comment from post.comments [array]
     Post.findOneAndUpdate({ comments: req.params.id }, { $pull: { comments: req.params.id } }, (err, data) => {
-      //
+      // https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndUpdate/
       if (err) console.log(err);
       //
       res.redirect('/admin/comments');
