@@ -3,6 +3,22 @@ const router = express.Router();
 // models
 const Post = require('../../models/Post');
 const Comment = require('../../models/Comment');
+//
+// const {userAuthenticated} = require('../../helpers/authentication');
+// router.all('/*', userAuthenticated, (req, res, next) => {})
+
+//
+// connect url and  hook to middleware
+router.all('/*', (req, res, next) => {
+  req.app.locals.layout = 'admin';
+  next();
+});
+
+router.get('/', (req, res) => {
+  Comment.find({ user: '5a610f5bba96f1e526a5cdbb' }).populate('user').then(comments => {
+    res.render('admin/comments', { comments: comments });
+  });
+});
 
 // FORM[HIDDEN]=POST AT http://localhost:4500/admin/comments
 router.post('/', (req, res) => {
