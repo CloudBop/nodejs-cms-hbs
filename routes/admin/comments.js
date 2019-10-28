@@ -16,7 +16,7 @@ router.all('/*', (req, res, next) => {
 
 router.get('/', (req, res) => {
   // populate comment with ref -> user
-  Comment.find({}).populate('user').then(comments => {
+  Comment.find({ user: req.user.id }).populate('user').then(comments => {
     res.render('admin/comments', { comments: comments });
   });
   // Comment.find({ user: '5a610f5bba96f1e526a5cdb b'}).populate('user').then(comments => {
