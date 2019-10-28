@@ -1,7 +1,7 @@
 
 <h1>Comments</h1>
 
-{{!-- <table class="table">
+<table class="table">
     <thead>
     <tr>
         <th>id</th>
@@ -11,36 +11,25 @@
     </tr>
     </thead>
     <tbody>
-
+    {{!-- loop through Comments models --}}
     {{#each comments}}
 
         <tr>
             <th>{{id}}</th>
             <td>{{user.firstName}}</td>
-
             <td>
-
                 <input data-id="{{id}}"  type="checkbox" name="approveComment" />
-
             </td>
-
-
-
-
             <td>{{generateDate date 'MMMM Do YYYY'}}</td>
             <td>
-
+                {{!-- Could be link but form more secure --}}
                 <form action="/admin/comments/{{id}}?_method=DELETE" method="post">
-
                     <button type="submit" class="btn btn-danger">Delete</button>
-
                 </form>
-
-
             </td>
          </tr>
 
     {{/each}}
 
     </tbody>
-</table> --}}
+</table>

@@ -15,9 +15,13 @@ router.all('/*', (req, res, next) => {
 });
 
 router.get('/', (req, res) => {
-  Comment.find({ user: '5a610f5bba96f1e526a5cdbb' }).populate('user').then(comments => {
+  // populate comment with ref -> user
+  Comment.find({}).populate('user').then(comments => {
     res.render('admin/comments', { comments: comments });
   });
+  // Comment.find({ user: '5a610f5bba96f1e526a5cdb b'}).populate('user').then(comments => {
+  //   res.render('admin/comments', { comments: comments });
+  // });
 });
 
 // FORM[HIDDEN]=POST AT http://localhost:4500/admin/comments
@@ -45,6 +49,19 @@ router.post('/', (req, res) => {
   });
 
   // res.send('it work');
+});
+
+router.delete('/:id', (req, res) => {
+  // remove this id from comment model
+  Comment.remove({ _id: req.params.id }).then(deleteItem => {
+    // remove comment from post.comments [array]
+    Post.findOneAndUpdate({ comments: req.params.id }, { $pull: { comments: req.params.id } }, (err, data) => {
+      //
+      if (err) console.log(err);
+      //
+      res.redirect('/admin/comments');
+    });
+  });
 });
 
 module.exports = router;
