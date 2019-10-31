@@ -84,7 +84,7 @@ router.delete('/:id', (req, res) => {
         post.remove().then(postRemoved => {
           //
           req.flash('success-message', `The post, ${post.title} was successfully deledted.`);
-          res.redirect('/admin/posts');
+          res.redirect('/admin/posts/my-posts');
         });
       });
     })
@@ -188,7 +188,7 @@ router.put('/edit/:id', (req, res) => {
 
     post.save().then(updatedPost => {
       req.flash('success-message', `The post, ${updatedPost.title} was successfully edited.`);
-      res.redirect('/admin/posts');
+      res.redirect('/admin/posts/my-posts');
     });
   });
 });
