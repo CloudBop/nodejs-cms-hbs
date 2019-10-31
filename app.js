@@ -12,7 +12,7 @@ const { mongoDbURL } = require('./config/database');
 const passport = require('passport');
 // mongoose will connect || create [cms]
 mongoose
-  .connect(mongoDbURL, { useNewUrlParser: true })
+  .connect(mongoDbURL, { useNewUrlParser: true, useFindAndModify: false })
   .then(db => {
     console.log('MONGO connected');
   })
