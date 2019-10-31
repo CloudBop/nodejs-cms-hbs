@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
       // console.log('savedPost', savedPost);
       newComment.save().then(savedComment => {
         // console.log('savedComment', savedComment);
-        res.redirect(`/posts/${post.id}`);
+        res.redirect(`/post/${post.id}`);
       });
     });
   });
