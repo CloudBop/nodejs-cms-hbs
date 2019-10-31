@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/posts/:id', (req, res) => {
-  // get all the posts
+  // query all the posts
   Post.findOne({ _id: req.params.id })
     .populate({
       // populate post with correct comments
@@ -35,13 +35,16 @@ router.get('/posts/:id', (req, res) => {
       // and populate posts with users who have commented
       populate: { path: 'user', model: 'users' }
     })
+    // populate user into posts.user
+    .populate('user')
     .then(post => {
       Category.find({}).then(categories => {
+        // send variables to hbs
+        // console.log(post);
+        // console.log(categories);
         res.render('home/post', { post: post, categories: categories });
       });
     });
-
-  // res.render('home/index')
 });
 
 router.get('/about', (req, res) => {

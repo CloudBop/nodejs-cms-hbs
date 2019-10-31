@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-mongo": "mongod --dbpath ~/data/db",
+    "mongod-start": "/Users/colinrowntree/mongodb/bin/mongod --dbpath=/Users/colinrowntree/mongodb-data",
     "start": "nodemon app.js"
   },
   "author": "",

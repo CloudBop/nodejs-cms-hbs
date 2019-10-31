@@ -4,11 +4,12 @@ const Schema = mongoose.Schema;
 
 const PostSchema = new Schema(
   {
+    // point to user_id
     user: {
       type: Schema.Types.ObjectId,
       ref: 'users'
     },
-
+    // point to cat_id
     category: {
       type: Schema.Types.ObjectId,
       ref: 'categories'

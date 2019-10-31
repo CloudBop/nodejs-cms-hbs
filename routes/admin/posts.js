@@ -5,7 +5,6 @@ const Category = require('../../models/Category');
 const fs = require('fs');
 const { isEmpty, uploadDir } = require('../../helpers/upload-helper');
 const { userAuthenticated } = require('../../helpers/authentication');
-
 // admin/ is defined in middleware
 // for all routes after admin/
 router.all('/*', userAuthenticated, (req, res, next) => {
@@ -14,7 +13,7 @@ router.all('/*', userAuthenticated, (req, res, next) => {
   //
   next();
 });
-
+//
 router.get('/', (req, res) => {
   // query db
   Post.find({})
@@ -119,6 +118,8 @@ router.post('/create', (req, res) => {
     const allowComments = req.body.allowComments === 'on' ? true : false;
     // create post model data
     const newPost = new Post({
+      // get user. WON'T EXIST UNLESS USER IS LOGGED IN
+      user: req.user.id,
       title: req.body.title,
       status: req.body.status,
       allowComments: allowComments,
@@ -143,11 +144,16 @@ router.post('/create', (req, res) => {
       });
   }
 });
-// submit edit form | requires method override
+// submit edit form | requires method override (in mark up)
 router.put('/edit/:id', (req, res) => {
+  //
   Post.findOne({ _id: req.params.id }).then(post => {
+    //
     const allowComments = req.body.allowComments ? true : false;
-    // console.log(allowComments)
+    // create new model interface
+    // get user. WON'T EXIST UNLESS USER IS LOGGED IN
+    post.user = req.user.id;
+    //
     post.title = req.body.title;
     post.status = req.body.status;
     post.allowComments = allowComments;

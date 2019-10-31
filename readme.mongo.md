@@ -4,8 +4,10 @@
 > catalina does NOT allow anything to be written to the root folder.
 > old Dbs have been moved to home directory
 > start mongo with...
+> NOT LIKE BELOW ANYMORE AS MONGO NOT IN usr/local
 mongod --dbpath ~/data/db
-
+> call binary here - to paths of databases
+/Users/colinrowntree/mongodb/bin/mongod --dbpath=/Users/colinrowntree/mongodb-data
 > mongo
 > show dbs
 admin          0.000GB
