@@ -27,6 +27,13 @@ router.get('/', (req, res) => {
       console.log(e);
     });
 });
+//
+// gets posts of current logged in user
+router.get('/my-posts', (req, res) => {
+  Post.find({ user: req.user.id }).populate('category').then(posts => {
+    res.render('admin/posts/my-posts', { posts: posts });
+  });
+});
 // /admin/posts/create
 router.get('/create', (req, res) => {
   Category.find({}).then(categories => {

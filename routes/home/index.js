@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
   // res.render('home/index')
 });
 
-router.get('/posts/:id', (req, res) => {
+router.get('/post/:id', (req, res) => {
   // query all the posts
   Post.findOne({ _id: req.params.id })
     .populate({

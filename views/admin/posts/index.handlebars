@@ -11,7 +11,7 @@
             <th>Status</th>
             <th>Category</th>
             <th>Allow Comments</th>
-            {{!-- <th>View Post</th> --}}
+            <th>View Post</th>
             <th>Date</th>
 
         </tr>
@@ -27,13 +27,19 @@
             <td>{{status}}</td>
             <td>{{category.name}}</td>
             <td>{{allowComments}}</td>
-            {{!-- <td><a href="/post/{{slug}}">View</a></td> --}}
+            {{!-- <a><a href="/post/{{slug}}">View</a></a> --}}
+            <td><a href="/post/{{id}}">View</a></td>
             <td>{{generateDate date 'MMMM Do YYYY'}}</td>
+            
+            
+            {{!-- 
             <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info"> Edit </a></td>
-
-            <td> <form action="/admin/posts/{{id}}?_method=DELETE" method="post">
-                <button type="submit" class="btn btn-danger">DELETE</button>
-            </form> </td>
+            <td> 
+                <form action="/admin/posts/{{id}}?_method=DELETE" method="post">
+                    <button type="submit" class="btn btn-danger">DELETE</button>
+                </form> 
+            </td>
+             --}}
 
 
         </tr>
