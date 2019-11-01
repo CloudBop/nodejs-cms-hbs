@@ -26,14 +26,18 @@ mongoose
 
 // middleware : connect static public folder
 app.use(express.static(path.join(__dirname, 'public')));
-
-const { select, generateDate } = require('./helpers/hbs-helpers');
+// config hbs
+const { select, generateDate, paginate } = require('./helpers/hbs-helpers');
 // setup template engine & set default page layout
 app.engine(
   'handlebars',
   exphbs({
     defaultLayout: 'home',
-    helpers: { select: select, generateDate: generateDate }
+    helpers: {
+      select: select,
+      generateDate: generateDate,
+      paginate: paginate
+    }
   })
 );
 app.set('view engine', 'handlebars');
