@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-// const URLSlugs = require('mongoose-url-slugs');
+// library for default for mongoose schema
+const URLSlugs = require('mongoose-url-slugs');
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema(
@@ -20,11 +21,9 @@ const PostSchema = new Schema(
       required: true
     },
 
-    // slug: {
-
-    //     type: String
-
-    // },
+    slug: {
+      type: String
+    },
 
     status: {
       type: String,
@@ -59,7 +58,16 @@ const PostSchema = new Schema(
   },
   { usePushEach: true }
 );
-
-// PostSchema.plugin(URLSlugs('title', {field: 'slug'}));
+//
+// method on schema to connect url slugs
+// pass the title to the field called slug
+PostSchema.plugin(
+  URLSlugs(
+    'title',
+    // (node:2314) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
+    // https://github.com/Automattic/mongoose/issues/6880
+    { field: 'slug' }
+  )
+);
 
 module.exports = mongoose.model('posts', PostSchema);

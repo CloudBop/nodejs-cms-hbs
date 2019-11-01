@@ -26,9 +26,9 @@ router.get('/', (req, res) => {
   // res.render('home/index')
 });
 
-router.get('/post/:id', (req, res) => {
-  // query all the posts, mongoose models
-  Post.findOne({ _id: req.params.id })
+router.get('/post/:slug', (req, res) => {
+  // query all the posts, mongoose models [remember _id for mongoose ids]
+  Post.findOne({ slug: req.params.slug })
     .populate({
       // populate post with comments
       path: 'comments',

@@ -29,10 +29,13 @@ router.get('/', (req, res) => {
 });
 //
 router.post('/generate-fake-posts', (req, res) => {
+  //
   for (let index = 0; index < req.body.amount; index++) {
+    //
     let post = new Post();
-
-    post.title = faker.name.title();
+    const title = faker.name.title();
+    post.title = title;
+    post.slug = title;
     post.status = 'public';
     post.allowComments = faker.random.boolean();
     post.body = faker.lorem.sentence();
@@ -41,7 +44,7 @@ router.post('/generate-fake-posts', (req, res) => {
       if (error) throw error;
     });
   }
-
+  //
   res.redirect('/admin/posts');
 });
 
