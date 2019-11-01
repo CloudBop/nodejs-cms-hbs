@@ -27,21 +27,22 @@ router.get('/', (req, res) => {
 });
 
 router.get('/post/:id', (req, res) => {
-  // query all the posts
+  // query all the posts, mongoose models
   Post.findOne({ _id: req.params.id })
     .populate({
-      // populate post with correct comments
+      // populate post with comments
       path: 'comments',
-      // and populate posts with users who have commented
+      // filter out !approveComment (Better than doing it in the markup)
+      match: { approveComment: true },
+      // and populate post with users who have commented
       populate: { path: 'user', model: 'users' }
     })
-    // populate user into posts.user
+    // populate user into posts.user (author=user)
     .populate('user')
     .then(post => {
       Category.find({}).then(categories => {
         // send variables to hbs
-        // console.log(post);
-        // console.log(categories);
+        // console.log(post) console.log(categories);
         res.render('home/post', { post: post, categories: categories });
       });
     });

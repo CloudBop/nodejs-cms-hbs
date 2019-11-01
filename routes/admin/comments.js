@@ -43,6 +43,7 @@ router.post('/', (req, res) => {
       // console.log('savedPost', savedPost);
       newComment.save().then(savedComment => {
         // console.log('savedComment', savedComment);
+        req.flash('success_message', 'Your comment will be reviewed.');
         res.redirect(`/post/${post.id}`);
       });
     });

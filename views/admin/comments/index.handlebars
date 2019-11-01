@@ -18,7 +18,8 @@
             <th>{{id}}</th>
             <td>{{user.firstName}}</td>
             <td>
-                <input data-id="{{id}}"  type="checkbox" name="approveComment" />
+                {{!-- set ui and onChange --}}
+                <input data-id="{{id}}" {{#if approveComment}} checked {{/if}} type="checkbox" name="approveComment" />
             </td>
             <td>{{generateDate date 'MMMM Do YYYY'}}</td>
             <td>
