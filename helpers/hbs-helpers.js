@@ -10,10 +10,84 @@ module.exports = {
     return moment(date).format(format);
   },
   paginate: function(options) {
-    console.log(options);
+    // console.log(options.hash);
+    // { pages: 14, current: 10 }
+    let output = '';
+    // left-most btn ui
+    if (options.hash.current === 1) {
+      // disable
+      output += `<li class="page-item disabled"><a class="page-link">First</a></li>`;
+    } else {
+      output += `<li class="page-item"><a href="?page=1" class="page-link">First</a></li>`;
+    }
+
+    let i = Number(options.hash.current) > 5 ? Number(options.hash.current) - 4 : 1;
+    // if selected paginate is greater than 5 from 1 add in ...
+    if (i !== 1) {
+      output += `<li class="page-item disabled"><a class="page-link">...</a></li>`;
+    }
+    // loop from i to create paginator number ui
+    for (; i <= Number(options.hash.current) + 4 && i <= options.hash.pages; i++) {
+      //
+      if (i === options.hash.current) {
+        output += `<li class="page-item active"><a class="page-link">${i}</a></li>`;
+      } else {
+        output += `<li class="page-item "><a href="?page=${i}" class="page-link">${i}</a></li>`;
+      }
+      // if paginate more than 5 pages from the end add ...
+      if (i === Number(options.hash.current) + 4 && i < options.hash.pages) {
+        output += `<li class="page-item disabled"><a class="page-link">...</a></li>`;
+      }
+    }
+    // if last paginator page
+    if (options.hash.current === options.hash.pages) {
+      output += `<li class="page-item disabled"><a class="page-link">Last</a></li>`;
+    } else {
+      output += `<li class="page-item "><a href="?page=${options.hash.pages}" class="page-link">Last</a></li>`;
+    }
+
+    return output;
+  },
+  paginateOld: function(options) {
+    // console.log(options);
+    let output = '';
+    //
+    if (options.hash.current === 1) {
+      //
+      output += `<li class="page-item disabled"> <a class="page-link">First </a> </li>`;
+    } else {
+      //
+      output += `<li class="page-item"> <a href="?page=1" class="page-link">Second </a> </li>`;
+    }
+    // if we go over 5 pages of pagination...
+    let i = Number(options.hash.current) > 5 ? Number(options.hash.current) - 4 : 1;
+    // add the ... link to begging of pagination ui
+    if (i !== 1) {
+      output += `<li class=""page-item disabled> <a class="page-link">...</a> </li>`;
+    }
+    //
+    for (; i <= Number(options.hash.current) + 4 && i <= options.hash.pages; i++) {
+      if (i === options.hash.current) {
+        output += `<li class="page-item active"> <a class="page-link"> ${i} </a> </li>`;
+      } else {
+        output += `<li class="page-item"> <a href="?page${i}" class="page-link"> ${i} </a> </li>`;
+      }
+    }
+    //  append dots...
+    if (i === Number(options.hash.current) + 4 && i < options.hash.pages) {
+      output += `<li class=""page-item disabled> <a class="page-link">...</a> </li>`;
+    }
+    // end
+    if (options.hash.current === options.hash.pages) {
+      output += `<li class="page-item disabled"> <a class="page-link">Last</a> </li>`;
+    } else {
+      output += `<li class="page-item"> <a href="?page${options.hash.pages}" class="page-link"> Last </a> </li>`;
+    }
+
+    return output;
   }
 };
-//  example options
+//  example console.log(options)
 // {
 //     name: 'paginate',
 //     hash: { current: 1 },

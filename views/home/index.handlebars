@@ -26,8 +26,8 @@
 
     <!-- Pagination -->
     <ul class="pagination justify-content-center mb-4">
-      {{!--  hbs loop ? --}}
-      {{#paginate current=1}} {{/paginate}}
+      {{!--  hbs helper --}}
+      {{#paginate current=currentPaginator pages=pagesInPaginator}} {{/paginate}}
       {{!--
       MOVED INTO HBS HELPER
        <li class="page-item">

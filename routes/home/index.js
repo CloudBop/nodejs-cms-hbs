@@ -16,12 +16,35 @@ router.all('/*', (req, res, next) => {
 });
 
 router.get('/', (req, res) => {
+  //
+  console.log(req.query);
+  // how many posts per 'paginator'
+  let perPage = 10;
+  // paginated page#
+  let page = req.query.page || 1;
   // get all the posts
-  Post.find({}).then(posts => {
-    Category.find({}).then(categories => {
-      res.render('home/index', { posts: posts, categories: categories });
+  Post.find({})
+    // current paginated posts shown from [0,10,20,30,40,50,60,ect]
+    .skip(perPage * page - perPage)
+    //
+    .limit(perPage)
+    //
+    .then(posts => {
+      console.log('skip: ', perPage * page - perPage);
+      //
+      Post.countDocuments().then(postCount => {
+        //
+        Category.find({}).then(categories => {
+          // pass data to paginate
+          res.render('home/index', {
+            posts: posts,
+            categories: categories,
+            currentPaginator: parseInt(page),
+            pagesInPaginator: Math.ceil(postCount / perPage)
+          });
+        });
+      });
     });
-  });
 
   // res.render('home/index')
 });
