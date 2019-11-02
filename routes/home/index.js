@@ -17,7 +17,7 @@ router.all('/*', (req, res, next) => {
 
 router.get('/', (req, res) => {
   //
-  console.log(req.query);
+  // console.log(req.query);
   // how many posts per 'paginator'
   let perPage = 10;
   // paginated page#
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
     .limit(perPage)
     //
     .then(posts => {
-      console.log('skip: ', perPage * page - perPage);
+      // console.log('skip: ', perPage * page - perPage);
       //
       Post.countDocuments().then(postCount => {
         //
