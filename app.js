@@ -75,6 +75,9 @@ app.use((req, res, next) => {
   // bind req.user && req.error from passport, this means we don't need to pass the variable to handblebars via individual responses
   res.locals.user = req.user || null;
   res.locals.error = req.flash('error');
+  // ARE THESE CALLED IN EVERY GET?
+  // console.log(req);
+  // console.log(res);
   // invoke rest of called route
   next();
 });
